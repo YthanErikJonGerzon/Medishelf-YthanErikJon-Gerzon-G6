@@ -1,0 +1,22 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<div class="card" style="max-width: 550px; margin: 0 auto;">
+    <h2>My Profile ({{ user.role }})</h2>
+    {% if user.profile_photo %}
+        <img src="{{ user.profile_photo.url }}" alt="Profile Photo" class="avatar">
+    {% endif %}
+    <p style="margin-bottom: 16px;"><strong>Username:</strong> {{ user.username }} | <strong>Status:</strong> {{ user.status }}</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn">Save Profile Changes</button>
+    </form>
+</div>
+{% endblock %}

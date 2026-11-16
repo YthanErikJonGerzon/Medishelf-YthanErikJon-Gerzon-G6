@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediShelf | Clinic Inventory System</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <nav class="navbar">
+        <div><strong>MediShelf</strong> ({{ user.role }})</div>
+        <div>
+            <a href="{% url 'dashboard_redirect' %}">Dashboard</a>
+            {% if user.role == 'Admin' %}
+                <a href="#">Manage Users</a>
+                <a href="#">Medicines & Supplies</a>
+                <a href="#">Audit Logs</a>
+            {% elif user.role == 'Staff' %}
+                <a href="#">Stock-In / Stock-Out</a>
+                <a href="#">Inventory List</a>
+            {% else %}
+                <a href="#">View Stock & Expiry</a>
+            {% endif %}
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

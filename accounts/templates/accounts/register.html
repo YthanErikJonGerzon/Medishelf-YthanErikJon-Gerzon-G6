@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>MediShelf Registration</title>
-</head>
-<body>
-    <h1>Welcome to MediShelf</h1>
-    <h2>Create Your Account</h2>
-
-    <form>
-        <input type="text" placeholder="Username">
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Password">
-
-        <button type="submit">Register</button>
+{% extends 'accounts/base.html' %}
+{% block content %}
+<div class="auth-box">
+    <h2>Create MediShelf Account</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn">Register</button>
     </form>
-</body>
-</html>
+    <p style="margin-top: 14px; font-size: 14px; text-align: center;">
+        Already have an account? <a href="{% url 'login' %}">Log in</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<div class="card">
+    <h2>Administrator Dashboard</h2>
+    <p>Welcome, <strong>{{ user.full_name }}</strong>. You have full system access (user roles, inventory CRUD, and audit logs).</p>
+    <div class="grid">
+        <div class="stat-card"><h4>User Accounts</h4><p>Assign roles & manage active staff</p></div>
+        <div class="stat-card"><h4>Expiring Soon (1–30 Days)</h4><p>Monitor batch shelf-life alerts</p></div>
+        <div class="stat-card"><h4>Low-Stock Items</h4><p>Review items below reorder level</p></div>
+    </div>
+</div>
+{% endblock %}

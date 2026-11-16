@@ -1,0 +1,11 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<div class="card">
+    <h2>Viewer Dashboard (Read-Only)</h2>
+    <p>Welcome, <strong>{{ user.full_name }}</strong>. Monitor clinic stock summaries and expiration reports.</p>
+    <div class="grid">
+        <div class="stat-card"><h4>Current Stock Summary</h4><p>View available medicines & supplies</p></div>
+        <div class="stat-card"><h4>Expiration Overview</h4><p>Inspect Valid vs. Expired inventory</p></div>
+    </div>
+</div>
+{% endblock %}
