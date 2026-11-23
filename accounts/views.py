@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import RegisterForm, ProfileUpdateForm
-
+from inventory.models import Medicine, MedicineBatch, StockTransaction, AuditLog
 
 def role_required(allowed_roles):
     """Prevents a user from opening another role's dashboard by typing its URL."""
@@ -58,6 +58,19 @@ def login_view(request):
 
     return render(request, 'accounts/login.html')
 
+def _get_inventory_context():
+    medicines = Medicine.objects.prefetch_related('batches').all()
+    batches = MedicineBatch.objects.select_related('medicine').all()
+    low_stock_items = [m for m in medicines if m.is_low_stock]
+    expiring_batches = [b for b in batches if b.expiration_status == 'Expiring Soon']
+    expired_batches = [b for b in batches if b.expiration_status == 'Expired']
+    return {
+        'total_medicines': medicines.count(),
+        'low_stock_items': low_stock_items,
+        'expiring_batches': expiring_batches,
+        'expired_batches': expired_batches,
+        'recent_transactions': StockTransaction.objects.select_related('user', 'batch__medicine')[:5],
+    }
 
 @login_required
 def logout_view(request):
@@ -78,18 +91,17 @@ def dashboard_redirect(request):
 
 @role_required(['Admin'])
 def admin_dashboard(request):
-    return render(request, 'accounts/dashboard_admin.html')
-
+    ctx = _get_inventory_context()
+    ctx['recent_logs'] = AuditLog.objects.select_related('user')[:5]
+    return render(request, 'accounts/dashboard_admin.html', ctx)
 
 @role_required(['Staff'])
 def staff_dashboard(request):
-    return render(request, 'accounts/dashboard_staff.html')
-
+    return render(request, 'accounts/dashboard_staff.html', _get_inventory_context())
 
 @role_required(['Viewer'])
 def viewer_dashboard(request):
-    return render(request, 'accounts/dashboard_viewer.html')
-
+    return render(request, 'accounts/dashboard_viewer.html', _get_inventory_context())
 
 @login_required
 def profile_view(request):

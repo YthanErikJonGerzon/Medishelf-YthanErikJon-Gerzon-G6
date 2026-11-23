@@ -10,17 +10,20 @@
     {% if user.is_authenticated %}
     <nav class="navbar">
         <div><strong>MediShelf</strong> ({{ user.role }})</div>
-        <div>
+       <div>
             <a href="{% url 'dashboard_redirect' %}">Dashboard</a>
             {% if user.role == 'Admin' %}
-                <a href="#">Manage Users</a>
-                <a href="#">Medicines & Supplies</a>
-                <a href="#">Audit Logs</a>
+                <a href="{% url 'medicine_list' %}">Medicines & Batches</a>
+                <a href="{% url 'record_transaction' %}">Stock-In / Out</a>
+                <a href="{% url 'transaction_history' %}">Transactions</a>
+                <a href="{% url 'audit_log_list' %}">Audit Logs</a>
             {% elif user.role == 'Staff' %}
-                <a href="#">Stock-In / Stock-Out</a>
-                <a href="#">Inventory List</a>
+                <a href="{% url 'medicine_list' %}">Inventory List</a>
+                <a href="{% url 'record_transaction' %}">Stock-In / Out</a>
+                <a href="{% url 'transaction_history' %}">Transactions</a>
             {% else %}
-                <a href="#">View Stock & Expiry</a>
+                <a href="{% url 'medicine_list' %}">View Stock & Expiry</a>
+                <a href="{% url 'transaction_history' %}">View Transactions</a>
             {% endif %}
             <a href="{% url 'profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Logout</a>
