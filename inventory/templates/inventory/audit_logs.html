@@ -1,0 +1,26 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+<div class="card">
+    <h2>System Audit Logs (BR-05)</h2>
+    <table style="width:100%; border-collapse:collapse; font-size:14px; margin-top:12px;">
+        <thead>
+            <tr style="background:#1e293b; color:#fff; text-align:left;">
+                <th style="padding:10px;">Timestamp</th>
+                <th style="padding:10px;">User</th>
+                <th style="padding:10px;">Action Performed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr style="border-bottom:1px solid #e2e8f0;">
+                <td style="padding:10px;">{{ log.logged_at|date:"Y-m-d H:i:s" }}</td>
+                <td style="padding:10px;">{{ log.user.username }} ({{ log.user.role }})</td>
+                <td style="padding:10px;">{{ log.action_performed }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" style="padding:12px; text-align:center;">No audit logs yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
